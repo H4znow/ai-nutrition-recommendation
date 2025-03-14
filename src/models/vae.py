@@ -4,26 +4,29 @@
  src : "AI nutrition recommendation using a deep generative model and ChatGPT", Ilias Papastratis & al., 2024
 """
 
-import tensorflow as tf
-from tensorflow.keras import layers, Model, random
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
 
-
-class Encoder(Model):
-    def __init__(self, latent_dim, hidden_units):
+class Encoder(nn.Module):
+    def __init__(self, input_dim, hidden_units, latent_dim):
         super(Encoder, self).__init__()
-        self.danse1 = layers.Dense(hidden_units, activation='relu')
-        self.danse2 = layers.Dense(hidden_units, activation='relu')
-        self.fc_mu = layers.Dense(latent_dim)
-        self.fc_logvar = layers.Dense(latent_dim)
-
-    def call(self, x):
-        h = self.dense1(x)
-        h = self.dense2(h)
+        self.fc1 = nn.Linear(input_dim, hidden_units)
+        self.fc2 = nn.Linear(hidden_units, hidden_units)
+        self.fc_mu = nn.Linear(hidden_units, latent_dim)
+        self.fc_logvar = nn.Linear(hidden_units, latent_dim)
+        self.relu = nn.ReLU()
+        
+    def forward(self, x):
+        h = self.relu(self.fc1(x))
+        h = self.relu(self.fc2(h))
         mu = self.fc_mu(h)
         logvar = self.fc_logvar(h)
         return mu, logvar
 
-def reparametrization(mu, logvar):
-    epsilon = random.normal(shape=mu.shape, mean=0.0, stddev=1.0)
-    z = mu + tf.exp(logvar * 0.5) * epsilon
+def reparameterize(mu, logvar):
+    std = torch.exp(0.5 * logvar)
+    epsilon = torch.randn_like(std)
+    z = mu + std * epsilon
     return z
