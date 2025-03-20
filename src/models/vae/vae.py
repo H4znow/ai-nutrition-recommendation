@@ -11,11 +11,13 @@ class Encoder(nn.Module):
     def __init__(self, input_dim, hidden_dim, latent_dim):
         super(Encoder, self).__init__()
         self.fc1 = nn.Linear(input_dim, hidden_dim)
+        self.fc2 = nn.Linear(input_dim, hidden_dim)
         self.fc_mu = nn.Linear(hidden_dim, latent_dim)
         self.fc_logvar = nn.Linear(hidden_dim, latent_dim)
         
     def forward(self, x):
-        h = F.relu(self.fc1(x))
+        x = F.relu(self.fc1(x))
+        h = F.relu(self.fc2(x))
         mu = self.fc_mu(h)
         logvar = self.fc_logvar(h)
         return mu, logvar

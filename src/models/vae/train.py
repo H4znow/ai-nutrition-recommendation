@@ -26,13 +26,7 @@ def run_epoch(encoder, decoder, X_features, Y_meals, target_EIs, min_macros, max
         mu, logvar = encoder(batch_X)
         z = reparameterize(mu, logvar)
         
-        # Decoder forward pass (now returns individual meal energies)
         class_logits, pred_energy, pred_macros, energies_tensor = decoder(z)
-        
-        # Optionally, adjust the meal portions using the optimizer layer:
-        adjusted_energies, new_total_energy = adjust_meal_portions(energies_tensor, batch_target_EI)
-        # (For training purposes, you might choose to compute EI_loss on pred_energy
-        #  or on new_total_energy depending on your design. Here we continue with pred_energy.)
         
         # Compute losses using utility function
         CE_loss, KLD_loss, EI_loss, L_macro, loss = compute_losses(
