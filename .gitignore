@@ -40,3 +40,6 @@ Pipfile.lock
 
 # Ignore local configuration files
 *.local
+
+# Ignore data files
+ressources/datasets/*
