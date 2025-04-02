@@ -43,3 +43,5 @@ Pipfile.lock
 
 # Ignore data files
 ressources/datasets/*
+
+*.DS_Store
