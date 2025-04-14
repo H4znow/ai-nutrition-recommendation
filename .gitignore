@@ -44,5 +44,6 @@ Pipfile.lock
 # Ignore data files
 ressources/datasets/*
 ressources/assets/*
+ressources/VAE_nutrition.pdf
 
 *.DS_Store
